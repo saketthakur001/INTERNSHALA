@@ -29,25 +29,31 @@ driver.get('https://www.instagram.com/hdfcbank/')
 # time.sleep(4)
 
 
-# Wait for the div with class _aagw to be clickable
-element = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.CSS_SELECTOR, "div._aagw"))
+# Wait for the div elements with class _aagw to be available
+elements = WebDriverWait(driver, 10).until(
+    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "div._aagw"))
 )
 
-# Click on the element
-element.click()
+# Click on the 4th element
+# Ensure that there are at least 4 posts before trying to click on the 4th
+if len(elements) >= 4:
+    elements[3].click()
+else:
+    print("Less than 4 posts available.")
+
+# Rest of your code remains the same
+
 # Find the ul element with classes _a9z6 _a9za
 ul_element = driver.find_element(By.CSS_SELECTOR, "ul._a9z6._a9za")
 
 # Get the inner HTML of the ul element
 html_content = ul_element.get_attribute('outerHTML')
-
 print(html_content)
-
 
 # Scroll to the bottom of the comments section
 actions = ActionChains(driver)
 actions.move_to_element(ul_element).perform()
+
 
 # Wait a bit for potential loading animations or transitions
 time.sleep(2)
