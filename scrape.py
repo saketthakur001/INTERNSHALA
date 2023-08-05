@@ -50,11 +50,12 @@ def purify_comments(comments):
 
 # extracs text from unpure comments
 def purify_comments(comment):
+
     # Remove leading and trailing special characters (", [, ])
     comment = re.sub(r'^[\["]*|[\]",]*$', '', comment)
 
     # Extract the timestamp and likes using regex
-    match = re.search(r'(\d+[smhdw])(\d*)$', comment)
+    match = re.search(r'(\d+[smhdw])(\d+)?$', comment)
     if match:
         timestamp = match.group(1)
         likes = int(match.group(2)) if match.group(2) else None
@@ -63,8 +64,6 @@ def purify_comments(comment):
     else:
         timestamp = None
         likes = None
-    
-    
 
     # Append to the results list
     return {'comment': comment.strip('Verified'), 'time': timestamp, 'likes': likes}
