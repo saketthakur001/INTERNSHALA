@@ -34,41 +34,44 @@ def get_comments(comments_html):
             username = user_link.strip('/')
             # Extract the comment text
             comment_text = li.get_text().replace(username, '', 1).strip()
-            comments_data.append({
-                'user-id': username,
-                'User_Profile_link': f"https://www.instagram.com{user_link}",
-                'comment': comment_text
-            })
-    
-    # Get the JavaScript code of the page
-
+            comments_data.append(comment_text.strip('ReplyComment OptionsLike'))
+            # ({
+            #     # 'user-id': username,
+            #     # 'User_Profile_link': f"https://www.instagram.com{user_link}",
+            #     'comment': comment_text.strip('ReplyComment OptionsLike')
+            # })
 
     # Further refine the extraction process to capture the timestamp, likes, and clean up the comment text
-    for comment in comments_data:
-        # Extract the timestamp using regex
-        timestamp_match = re.search(r'(\d+[smh])', comment['comment'])
-        if timestamp_match:
-            comment['time'] = timestamp_match.group(1)
-            # Remove the timestamp from the comment text
-            comment['comment'] = comment['comment'].replace(comment['time'], '', 1).strip()
+    # for comment in comments_data:
+        # print(comment)
 
-        # Extract the likes count using regex
-        likes_match = re.search(r'(\d+) like', comment['comment'])
-        if likes_match:
-            comment['likes'] = int(likes_match.group(1))
-            # Remove the likes count from the comment text
-            comment['comment'] = comment['comment'].replace(f"{comment['likes']} like", '', 1).strip()
-        elif 'like' in comment['comment']:
-            comment['likes'] = 1
-            # Remove the "like" text from the comment
-            comment['comment'] = comment['comment'].replace('like', '', 1).strip()
-        else:
-            comment['likes'] = 0
-
-        # Remove any metadata from the comment text
-        comment['comment'] = comment['comment'].replace('ReplyComment OptionsLike', '', 1).strip()
     return comments_data
+        # Extract the timestamp using regex
+        # timestamp_match = re.search(r'(\d+[smh])', comment['comment'])
+        # if timestamp_match:
+        #     comment['time'] = timestamp_match.group(1)
+        #     # Remove the timestamp from the comment text
+        #     comment['comment'] = comment['comment'].replace(comment['time'], '', 1).strip()
+        #     print(comment['comment'])
 
+    #     # Extract the likes count using regex
+    #     likes_match = re.search(r'(\d+) like', comment['comment'])
+    #     if likes_match:
+    #         comment['likes'] = int(likes_match.group(1))
+    #         # Remove the likes count from the comment text
+    #         comment['comment'] = comment['comment'].replace(f"{comment['likes']} like", '', 1).strip()
+    #     else:
+    #         likes_match = re.search(r'(\d+) likes', comment['comment'])
+    #         if likes_match:
+    #             comment['likes'] = int(likes_match.group(1))
+    #             # Remove the likes count from the comment text
+    #             comment['comment'] = comment['comment'].replace(f"{comment['likes']} likes", '', 1).strip()
+    #         else:
+    #             comment['likes'] = 0
+
+    #     # Remove any metadata from the comment text
+    #     comment['comment'] = comment['comment'].replace('ReplyComment OptionsLike', '', 1).strip()
+    # return comments_data
 
 
 
@@ -105,7 +108,7 @@ actions.move_to_element(ul_element).perform()
 posts = []
 
 # Wait a bit for potential loading animations or transitions
-time.sleep(2)
+# time.sleep(2)
 
 for i in range(6):
     comments_container = driver.find_element(By.CSS_SELECTOR, "ul._a9z6._a9za")
@@ -115,7 +118,7 @@ for i in range(6):
         # Use JavaScript to scroll to the bottom of the comments container/modal
         driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight;", comments_container)
         print('scrolling to the bottom')
-        time.sleep(1)
+        time.sleep(1.5)
 
         # Check if the "Load more comments" button with the specific attributes is present
         try:
@@ -124,7 +127,7 @@ for i in range(6):
             print('hurray clicked on the button 😎😎')
             button = True
             # Optionally add a sleep after clicking the button to ensure the new comments are loaded
-            time.sleep(2)
+            time.sleep(.5)
 
         except NoSuchElementException:
             # If the button is not found, it means all comments are already loaded or the specific button is not present
@@ -136,8 +139,11 @@ for i in range(6):
     # Get the inner HTML of the ul element
     html_content = ul_element.get_attribute('outerHTML')
     comments = get_comments(html_content)
-    posts.append(comments)
-    break
+    try:
+        posts.append(comments)
+    except:
+        print("didn't work")
+    # break
     # click on the next button
     # Find the specific button inside the div with classes "_aaqg _aaqh" and click on it
     specific_button = driver.find_element(By.CSS_SELECTOR, "div._aaqg._aaqh > button._abl-")
@@ -146,7 +152,7 @@ for i in range(6):
 import json
 
 # Save the posts list to a text file
-with open('posts.txt', 'w') as file:
+with open('test.txt', 'w', encoding='utf-8') as file:
     file.write(json.dumps(posts, indent=4))
 
 
