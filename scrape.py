@@ -11,13 +11,12 @@ import time
 import re
 from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
-
+import pandas as pd
 
 # Your existing setup
 options = webdriver.ChromeOptions()
 options.add_argument("--user-data-dir=C:\\Temp\\ChromeProfile")
 driver = webdriver.Chrome(options=options)
-
 
 ## DISCONTINUED ##
 def purify_comments(comments):
@@ -45,12 +44,11 @@ def purify_comments(comments):
                 likes = None
 
             # Append to the results list
-            comments_data.append({'comment': comment.strip('Verified'), 'time': timestamp, 'likes': likes})
+            comments_data.append({'comment': comment.replace('Verified', ''), 'time': timestamp, 'likes': likes})
 ## DISCONTINUED ##
 
 # extracs text from unpure comments
 def purify_comments(comment):
-
     # Remove leading and trailing special characters (", [, ])
     comment = re.sub(r'^[\["]*|[\]",]*$', '', comment)
 
@@ -65,9 +63,9 @@ def purify_comments(comment):
         timestamp = None
         likes = None
 
-    # Append to the results list
-    return {'comment': comment.strip('Verified'), 'time': timestamp, 'likes': likes}
 
+    # Append to the results list
+    return {'comment': comment.replace('Verified', ''), 'time': timestamp, 'likes': likes}
 
 
 def get_comments(comments_html):
@@ -82,21 +80,60 @@ def get_comments(comments_html):
         if user_link_element:
             user_link = user_link_element.get('href')
             # Extract the username from the user link (assuming the format is "/username/")
-            username = user_link.strip('/')
+            user_id = user_link.strip('/')
+            # send request to get the user name
+            # user_name = Get_User_Name_From_Insta(f"https://www.instagram.com{user_link}")
+            # time.sleep(1)
+            user_name = 'none'
             # Extract the comment text
-            comment_text = li.get_text().replace(username, '', 1).strip()
+            comment_text = li.get_text().replace(user_id, '', 1).strip()
             # comments_data.append(comment_text.strip('ReplyComment OptionsLike'))
             post_link = driver.current_url
-            comment_data = purify_comments(comment_text.strip('ReplyComment OptionsLike'))
+            if 'ReplySee translationComment OptionsLike' in comment_text:
+                print(comment_text)
+            comment_data = purify_comments(comment_text.replace('ReplyComment OptionsLike', '').replace('ReplySee translationComment OptionsLike', ''))
+            # print(comment_data['comment'])
+            
             comments_data.append({
-                'user-id': username,
-                'User_Profile_link': f"https://www.instagram.com{user_link}",
+                'user-id': user_id,
+                # 'uesrname': user_name['user_name'],
+                'Posted * time ago' : comment_data['time'],
                 'comment': comment_data['comment'],
                 'post_link': post_link,
-                'Posted ** time ago' : comment_data['time'],
+                'User_Profile_link': f"https://www.instagram.com{user_link}",
             })
+            if comment_data['time'] == None:
+                print(comment_data)
+            print(comment_data['time'])
     return comments_data
 
+import requests
+from bs4 import BeautifulSoup
+
+# example url
+#url = "https://www.instagram.com/hdfcbank/"
+
+def Get_User_Name_From_Insta(user_profile_link):
+    # Send a GET request to the URL
+    response = requests.get(user_profile_link)
+    # Check if the request was successful (status code 200 means success)
+    if response.status_code == 200:
+        # Parse the HTML content using BeautifulSoup
+        soup = BeautifulSoup(response.content, "html.parser")
+        
+        # Get the entire HTML content of the page
+        html_content = soup.prettify()
+        # Print or use the HTML content as needed    # Get the text from the HTML
+        page_text = soup.get_text()
+        # print(html_content)
+        # print(page_text)
+        txt = page_text.strip().split('•')[0].split('(@')
+        user_name = txt[0].strip()
+        user_id = txt[1].split(')')[0]
+        # print(user_name, user_id)
+        return {'user_name' : user_name, 'user_id' :  user_id}
+    else:
+        print(f"Failed to retrieve the page. Status Code: {response.status_code}")
 
 
 # Navigate to the Instagram page
@@ -131,9 +168,6 @@ actions.move_to_element(ul_element).perform()
 # comments and other details
 posts = []
 
-# Wait a bit for potential loading animations or transitions
-# time.sleep(2)
-
 for i in range(6):
     comments_container = driver.find_element(By.CSS_SELECTOR, "ul._a9z6._a9za")
     button = True
@@ -167,18 +201,20 @@ for i in range(6):
         posts.append(comments)
     except:
         print("didn't work")
-    break
     # click on the next button
     # Find the specific button inside the div with classes "_aaqg _aaqh" and click on it
     specific_button = driver.find_element(By.CSS_SELECTOR, "div._aaqg._aaqh > button._abl-")
     specific_button.click()
 
-import json
 
-# Save the posts list to a text file
-with open('test.txt', 'w', encoding='utf-8') as file:
-    file.write(json.dumps(posts, indent=4))
+# Flatten the list
+flat_list = [item for sublist in posts for item in sublist]
 
+# Convert the list of dictionaries to a DataFrame
+df = pd.DataFrame(flat_list)
+
+# Save the DataFrame to a csv file
+df.to_csv('comments.csv', index=False)
 
 time.sleep(1000)
 
