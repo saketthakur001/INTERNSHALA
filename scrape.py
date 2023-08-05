@@ -19,6 +19,58 @@ options.add_argument("--user-data-dir=C:\\Temp\\ChromeProfile")
 driver = webdriver.Chrome(options=options)
 
 
+## DISCONTINUED ##
+def purify_comments(comments):
+    comments_data = []
+    for comments in lis:
+        # Revised code to handle extraneous characters and extract likes
+
+        # Process each line (comment)
+        for comment in comments:
+            # Strip newline and leading/trailing spaces
+            comment = comment.strip()
+
+            # Remove leading and trailing special characters (", [, ])
+            comment = re.sub(r'^[\["]*|[\]",]*$', '', comment)
+
+            # Extract the timestamp and likes using regex
+            match = re.search(r'(\d+[smhdw])(\d*)$', comment)
+            if match:
+                timestamp = match.group(1)
+                likes = int(match.group(2)) if match.group(2) else None
+                # Remove the timestamp and likes from the comment text
+                comment = comment[:comment.rfind(timestamp)].strip()
+            else:
+                timestamp = None
+                likes = None
+
+            # Append to the results list
+            comments_data.append({'comment': comment.strip('Verified'), 'time': timestamp, 'likes': likes})
+## DISCONTINUED ##
+
+# extracs text from unpure comments
+def purify_comments(comment):
+    # Remove leading and trailing special characters (", [, ])
+    comment = re.sub(r'^[\["]*|[\]",]*$', '', comment)
+
+    # Extract the timestamp and likes using regex
+    match = re.search(r'(\d+[smhdw])(\d*)$', comment)
+    if match:
+        timestamp = match.group(1)
+        likes = int(match.group(2)) if match.group(2) else None
+        # Remove the timestamp and likes from the comment text
+        comment = comment[:comment.rfind(timestamp)].strip()
+    else:
+        timestamp = None
+        likes = None
+    
+    
+
+    # Append to the results list
+    return {'comment': comment.strip('Verified'), 'time': timestamp, 'likes': likes}
+
+
+
 def get_comments(comments_html):
     # Parse the HTML using BeautifulSoup
     soup = BeautifulSoup(comments_html, 'html.parser')
@@ -34,44 +86,17 @@ def get_comments(comments_html):
             username = user_link.strip('/')
             # Extract the comment text
             comment_text = li.get_text().replace(username, '', 1).strip()
-            comments_data.append(comment_text.strip('ReplyComment OptionsLike'))
-            # ({
-            #     # 'user-id': username,
-            #     # 'User_Profile_link': f"https://www.instagram.com{user_link}",
-            #     'comment': comment_text.strip('ReplyComment OptionsLike')
-            # })
-
-    # Further refine the extraction process to capture the timestamp, likes, and clean up the comment text
-    # for comment in comments_data:
-        # print(comment)
-
+            # comments_data.append(comment_text.strip('ReplyComment OptionsLike'))
+            post_link = driver.current_url
+            comment_data = purify_comments(comment_text.strip('ReplyComment OptionsLike'))
+            comments_data.append({
+                'user-id': username,
+                'User_Profile_link': f"https://www.instagram.com{user_link}",
+                'comment': comment_data['comment'],
+                'post_link': post_link,
+                'Posted ** time ago' : comment_data['time'],
+            })
     return comments_data
-        # Extract the timestamp using regex
-        # timestamp_match = re.search(r'(\d+[smh])', comment['comment'])
-        # if timestamp_match:
-        #     comment['time'] = timestamp_match.group(1)
-        #     # Remove the timestamp from the comment text
-        #     comment['comment'] = comment['comment'].replace(comment['time'], '', 1).strip()
-        #     print(comment['comment'])
-
-    #     # Extract the likes count using regex
-    #     likes_match = re.search(r'(\d+) like', comment['comment'])
-    #     if likes_match:
-    #         comment['likes'] = int(likes_match.group(1))
-    #         # Remove the likes count from the comment text
-    #         comment['comment'] = comment['comment'].replace(f"{comment['likes']} like", '', 1).strip()
-    #     else:
-    #         likes_match = re.search(r'(\d+) likes', comment['comment'])
-    #         if likes_match:
-    #             comment['likes'] = int(likes_match.group(1))
-    #             # Remove the likes count from the comment text
-    #             comment['comment'] = comment['comment'].replace(f"{comment['likes']} likes", '', 1).strip()
-    #         else:
-    #             comment['likes'] = 0
-
-    #     # Remove any metadata from the comment text
-    #     comment['comment'] = comment['comment'].replace('ReplyComment OptionsLike', '', 1).strip()
-    # return comments_data
 
 
 
@@ -143,7 +168,7 @@ for i in range(6):
         posts.append(comments)
     except:
         print("didn't work")
-    # break
+    break
     # click on the next button
     # Find the specific button inside the div with classes "_aaqg _aaqh" and click on it
     specific_button = driver.find_element(By.CSS_SELECTOR, "div._aaqg._aaqh > button._abl-")

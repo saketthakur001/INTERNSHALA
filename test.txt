@@ -1,0 +1,74 @@
+[
+    [
+        {
+            "user-id": "hdfcbank",
+            "User_Profile_link": "https://www.instagram.com/hdfcbank/",
+            "comment": "Let\u2019s visit a new chapter of Kaamyabi Ki Kahaniyan with Gandhar Oil\u2019s Ashlesh Parekh and his trusted business partner, HDFC Bank My Business.Click the link in the bio to learn more.#HDFCBank #Bank #Money #Finance #MyBusiness #Business #Enterprise #KaamyabiKiKahaniyan #GandharOil",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "15h"
+        },
+        {
+            "user-id": "brewing_elixir_1111",
+            "User_Profile_link": "https://www.instagram.com/brewing_elixir_1111/",
+            "comment": "Make some new policies for the sales team where abuse is accepted as normal.  The story of most banks here.",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "9h"
+        },
+        {
+            "user-id": "arshadinr",
+            "User_Profile_link": "https://www.instagram.com/arshadinr/",
+            "comment": "Nice bank \ud83d\udc4d\ud83c\udffb, staff and every facility \ud83d\udc4d\ud83c\udffb wonderful facilities \ud83d\udc4d\ud83c\udffb",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "9h"
+        },
+        {
+            "user-id": "superstar_king_22",
+            "User_Profile_link": "https://www.instagram.com/superstar_king_22/",
+            "comment": "First of all thanks to all the HDFC family \ud83d\ude4f  I need you so much today. I am now studying mba in nagpur. I have a great desire or dream to learn operation and credit. We now have summer internship vacancies. Au family has given me a lot before. I want to work in HDFC for life time I am studying finance. I don't know what to do due to lack of money. If you are looking at my comment then I am ready to sacrifice my all for HDFC bank\ud83d\ude4f\ud83d\ude4f Please trust me completely",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "11h"
+        },
+        {
+            "user-id": "immu_rs200",
+            "User_Profile_link": "https://www.instagram.com/immu_rs200/",
+            "comment": "This bank will loot the middle class customers",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "2h"
+        },
+        {
+            "user-id": "oyejungli",
+            "User_Profile_link": "https://www.instagram.com/oyejungli/",
+            "comment": "Fraud bank , they not supporting me at all, my account has been blocked since 2 weeks because of Kyc and I am here in usa and they telling me to visit their branch to unblock the account \u202636",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": null
+        },
+        {
+            "user-id": "immu_rs200",
+            "User_Profile_link": "https://www.instagram.com/immu_rs200/",
+            "comment": "Worst bank in india",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "14h"
+        },
+        {
+            "user-id": "immu_rs200",
+            "User_Profile_link": "https://www.instagram.com/immu_rs200/",
+            "comment": "Don't believe all these posts this is the worst bank I have ever seen",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "14h"
+        },
+        {
+            "user-id": "rajeshsen547",
+            "User_Profile_link": "https://www.instagram.com/rajeshsen547/",
+            "comment": "",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "9h"
+        },
+        {
+            "user-id": "ut_most_protection_",
+            "User_Profile_link": "https://www.instagram.com/ut_most_protection_/",
+            "comment": "H",
+            "post_link": "https://www.instagram.com/p/CvhhQc0upI5/",
+            "Posted ** time ago": "11h"
+        }
+    ]
+]
